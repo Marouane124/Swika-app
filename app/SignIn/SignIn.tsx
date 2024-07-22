@@ -33,23 +33,18 @@ export default function SignIn() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" className="pt-16 mx-auto">
       <CssBaseline />
       <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
+        className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg"
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} className="bg-blue-500">
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5" className='text-blue-500 text-base'>
+        <Typography component="h1" variant="h5" className="text-blue-500 text-xl">
           Connectez-vous
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate className="mt-4 w-full">
           <TextField
             margin="normal"
             required
@@ -59,6 +54,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            className="mb-4"
           />
           <TextField
             margin="normal"
@@ -69,31 +65,32 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            className="mb-4"
           />
 
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            className="bg-blue-500 hover:bg-blue-600 text-white mt-4 mb-2"
           >
             Se connecter
           </Button>
-          <Grid container>
+          <Grid container className="text-sm mt-4">
             <Grid item xs>
-                <Link href="/Forgot" passHref className='text-blue-500 text-sm hover:underline'>
-                Mot de passe oublié?
-                </Link>
+              <Link href="/Forgot" passHref className="text-blue-500 hover:underline">
+                  Mot de passe oublié?
+              </Link>
             </Grid>
             <Grid item>
-                <Link href="/SignUp" passHref className='text-blue-500 text-sm hover:underline'>
-                {"Pas de compte? S'inscrire"}
-                </Link>
+              <Link href="/SignUp" passHref className="text-blue-500 hover:underline">
+                  {"Pas de compte? S'inscrire"}
+              </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Copyright className="mt-8 mb-4" />
     </Container>
   );
 }
