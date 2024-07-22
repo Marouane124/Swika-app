@@ -1,7 +1,9 @@
-/*import NextAuth from "next-auth"
 
-const handler = NextAuth({
-  ...
-})
+import { NextResponse } from 'next/server';
 
-export { handler as GET, handler as POST }*/
+// Define a GET handler to return a static response
+export async function GET() {
+  return NextResponse.json({
+    message: 'This is a static response for testing purposes.',
+  });
+}
