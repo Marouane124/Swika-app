@@ -9,17 +9,17 @@ import Link from 'next/link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      Swika {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+          {'Copyright © '}
+          Swika {new Date().getFullYear()}
+          {'.'}
+        </Typography>
+      );
 }
 
 export default function SignIn() {
@@ -38,12 +38,12 @@ export default function SignIn() {
       <Box
         className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg"
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} className="bg-blue-500">
+        <Avatar className="bg-blue-500 m-1">
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5" className="text-blue-500 text-xl">
+        <h1 className="text-blue-500 text-xl font-semibold">
           Connectez-vous
-        </Typography>
+        </h1>
         <Box component="form" onSubmit={handleSubmit} noValidate className="mt-4 w-full">
           <TextField
             margin="normal"
