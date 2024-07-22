@@ -54,7 +54,6 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
-            className="mb-4"
           />
           <TextField
             margin="normal"
@@ -65,14 +64,14 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-            className="mb-4"
+            className="mt-4"
           />
 
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            className="bg-blue-500 hover:bg-blue-600 text-white mt-4 mb-2"
+            className="bg-blue-500 hover:bg-blue-600 text-white mt-4"
           >
             Se connecter
           </Button>
