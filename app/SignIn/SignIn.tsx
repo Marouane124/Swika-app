@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { signIn } from 'next-auth/react';
-import { useRouter  } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import GoogleSignInButton from '@/components/GoogleButton';
 
@@ -44,8 +44,8 @@ export default function SignIn() {
 
     const result = await signIn("credentials", {
       redirect: false,
-      email: data.get('email'),
-      password: data.get('password'),
+      email,
+      password,
     });
 
     if (result?.error) {
@@ -54,7 +54,7 @@ export default function SignIn() {
       });
       console.log(result.error);
     } else {
-      toast.success('Connecté avec succès !',{
+      toast.success('Connecté avec succès !',{
         duration: 1000, 
       });
       router.push("/");
@@ -64,9 +64,7 @@ export default function SignIn() {
   return (
     <Container component="main" maxWidth="xs" className="pt-16 mx-auto">
       <CssBaseline />
-      <Box
-        className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg"
-      >
+      <Box className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
         <Avatar className="bg-blue-500 m-1">
           <LockOutlinedIcon />
         </Avatar>
@@ -95,7 +93,6 @@ export default function SignIn() {
             autoComplete="current-password"
             className="mt-4"
           />
-
           <Button
             type="submit"
             fullWidth
@@ -104,23 +101,21 @@ export default function SignIn() {
           >
             Se connecter
           </Button>
-          
           <hr className="my-4 border-t border-gray-300" />
-          <GoogleSignInButton />
-
-          <Grid container className="text-sm mt-4">
-            <Grid item xs>
-              <Link href="/forgot" passHref className="text-blue-500 hover:underline">
-                  Mot de passe oublié?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" passHref className="text-blue-500 hover:underline">
-                  {"Pas de compte? S'inscrire"}
-              </Link>
-            </Grid>
-          </Grid>
         </Box>
+        <GoogleSignInButton />
+        <Grid container className="text-sm mt-4">
+          <Grid item xs>
+            <Link href="/forgot" passHref className="text-blue-500 hover:underline">
+                Mot de passe oublié?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link href="/signup" passHref className="text-blue-500 hover:underline">
+                {"Pas de compte? S'inscrire"}
+            </Link>
+          </Grid>
+        </Grid>
       </Box>
       <Copyright className="mt-8 mb-5" />
     </Container>
