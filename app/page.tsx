@@ -1,10 +1,10 @@
-// page.tsx
 "use client"; // Indique que ce composant est un Client Component
 
 import React, { useState } from 'react';
 import Nav from '../components/nav';
 import ProductCard from '../components/prodcard';
 import Footer from '../components/footer'; // Import du Footer
+import { useRouter } from 'next/navigation';
 
 const products = [
   {
@@ -46,6 +46,7 @@ const products = [
 
 const Page: React.FC = () => {
   const [fileInfo, setFileInfo] = useState<{ name: string; size: number } | null>(null);
+  const router = useRouter();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -55,19 +56,21 @@ const Page: React.FC = () => {
     }
   };
 
+  const handleClick = () => {
+    router.push("/SignIn");
+  };
+
   return (
     <div className="min-h-screen min-w-screen bg-gray-100 pt-16"> {/* Padding-top pour compenser la hauteur de la barre de navigation */}
       <Nav />
-      <h1 className="text-center text-3xl font-bold my-6">Welcome to the Page</h1>
-      <div className="flex justify-center mt-8">
-        <label className="flex flex-col items-center px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 transition duration-300">
-          <span>Upload Document</span>
-          <input
-            type="file"
-            className="hidden"
-            onChange={handleFileUpload}
-          />
-        </label>
+      <h1 className="text-center text-3xl font-bold my-6 mt-[150px]">Déposer votre annonce</h1>
+      <div className="flex justify-center">
+        <button
+          onClick={handleClick}
+          className="w-full flex items-center justify-center h-14 px-6 mt-4 text-sm transition-colors duration-300 bg-white border-2 border-gray text-black rounded-lg focus:shadow-outline hover:bg-slate-200"
+        >
+          <span className="ml-4">ajouter annonce </span>
+        </button>
       </div>
       <div className="flex flex-wrap justify-center gap-6 p-4 mt-16">
         {products.map(product => (
