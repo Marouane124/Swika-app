@@ -11,6 +11,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { signIn } from 'next-auth/react';
+import { useRouter  } from 'next/navigation'
+import { toast } from 'react-hot-toast';
+import GoogleSignInButton from '@/components/GoogleButton';
 
 function Copyright(props: any) {
     return (
@@ -19,17 +23,42 @@ function Copyright(props: any) {
           Swika {new Date().getFullYear()}
           {'.'}
         </Typography>
-      );
+    );
 }
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const email = data.get('email');
+    const password = data.get('password');
+
+    if (!email || !password) {
+      toast.error('Veuillez remplir tous les champs !',{
+        duration: 1500, 
+      });
+      return;
+    }
+
+    const result = await signIn("credentials", {
+      redirect: false,
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    if (result?.error) {
+      toast.error('Email ou mot de passe incorrect !',{
+        duration: 1500, 
+      });
+      console.log(result.error);
+    } else {
+      toast.success('Connecté avec succès !',{
+        duration: 1000, 
+      });
+      router.push("/");
+    }
   };
 
   return (
@@ -75,14 +104,18 @@ export default function SignIn() {
           >
             Se connecter
           </Button>
+          
+          <hr className="my-4 border-t border-gray-300" />
+          <GoogleSignInButton />
+
           <Grid container className="text-sm mt-4">
             <Grid item xs>
-              <Link href="/Forgot" passHref className="text-blue-500 hover:underline">
+              <Link href="/forgot" passHref className="text-blue-500 hover:underline">
                   Mot de passe oublié?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/SignUp" passHref className="text-blue-500 hover:underline">
+              <Link href="/signup" passHref className="text-blue-500 hover:underline">
                   {"Pas de compte? S'inscrire"}
               </Link>
             </Grid>
