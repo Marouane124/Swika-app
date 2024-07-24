@@ -1,33 +1,19 @@
 "use client";
 
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from 'next/link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { toast } from 'react-hot-toast';
+import Link from 'next/link';
 import GoogleSignInButton from '@/components/GoogleButton';
-
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-          {'Copyright © '}
-          Swika {new Date().getFullYear()}
-          {'.'}
-        </Typography>
-    );
-}
+import LockIcon from '@mui/icons-material/Lock';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export default function SignIn() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,8 +22,8 @@ export default function SignIn() {
     const password = data.get('password');
 
     if (!email || !password) {
-      toast.error('Veuillez remplir tous les champs !',{
-        duration: 1500, 
+      toast.error('Veuillez remplir tous les champs !', {
+        duration: 1500,
       });
       return;
     }
@@ -49,75 +35,105 @@ export default function SignIn() {
     });
 
     if (result?.error) {
-      toast.error('Email ou mot de passe incorrect !',{
-        duration: 1500, 
+      toast.error('Email ou mot de passe incorrect !', {
+        duration: 1500,
       });
       console.log(result.error);
     } else {
-      toast.success('Connecté avec succès !',{
-        duration: 1000, 
+      toast.success('Connecté avec succès !', {
+        duration: 1000,
       });
       router.push("/");
     }
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   return (
-    <Container component="main" maxWidth="xs" className="pt-16 mx-auto">
-      <CssBaseline />
-      <Box className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
-        <Avatar className="bg-blue-500 m-1">
-          <LockOutlinedIcon />
-        </Avatar>
-        <h1 className="text-blue-500 text-xl font-semibold">
-          Connectez-vous
-        </h1>
-        <Box component="form" onSubmit={handleSubmit} noValidate className="mt-4 w-full">
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Adresse e-mail"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Mot de passe"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            className="mt-4"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className="bg-blue-500 hover:bg-blue-600 text-white mt-4"
-          >
-            Se connecter
-          </Button>
-          <hr className="my-4 border-t border-gray-300" />
-        </Box>
-        <GoogleSignInButton />
-        <Grid container className="text-sm mt-4">
-          <Grid item xs>
-            <Link href="/forgot" passHref className="text-blue-500 hover:underline">
-                Mot de passe oublié?
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+        <div className="flex justify-center mb-6">
+          <h1 className="text-black text-2xl font-bold">Bonjour ! <span role="img" aria-label="wave">👋</span></h1>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              E-mail
+            </label>
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Votre email"
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <MailOutlineIcon style={{ color: 'black' }} />
+              </div>
+            </div>
+          </div>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Mot de passe
+            </label>
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                id="password"
+                className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Votre mot de passe"
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <LockIcon style={{ color: 'black' }} />
+              </div>
+              <div
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                onClick={toggleShowPassword}
+              >
+                {showPassword ? (
+                  <VisibilityOffIcon style={{ color: 'black' }} />
+                ) : (
+                  <VisibilityIcon style={{ color: 'black' }} />
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-end justify-end mb-6">
+            <Link href="/forgot" passHref className="text-sm text-indigo-600 hover:underline">
+              Mot de passe oublié?
             </Link>
-          </Grid>
-          <Grid item>
-            <Link href="/signup" passHref className="text-blue-500 hover:underline">
-                {"Pas de compte? S'inscrire"}
-            </Link>
-          </Grid>
-        </Grid>
-      </Box>
-      <Copyright className="mt-8 mb-5" />
-    </Container>
+          </div>
+          <div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Se connecter
+            </button>
+          </div>
+          <div className="mt-6 relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">ou</span>
+            </div>
+          </div>
+        </form>
+        <div className="mt-6">
+          <GoogleSignInButton />
+        </div>
+        <div className="mt-6 flex items-center justify-center">
+          <span className="px-2 text-black text-sm">Envie de nous rejoindre?</span>
+          <Link href="/signup" passHref className="text-sm text-indigo-600 hover:underline">
+            Créer un compte
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
