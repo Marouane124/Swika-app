@@ -22,12 +22,12 @@ const Navbar: React.FC = () => {
           />
         </div>
         <div className="flex items-center space-x-4">
-          <Link href="/SignIn" legacyBehavior>
+          <Link href="/signin" legacyBehavior>
             <a className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition duration-300">
               Sign in
             </a>
           </Link>
-          <Link href="/SignUp" legacyBehavior>
+          <Link href="/signup" legacyBehavior>
             <a className="px-4 py-2 border border-purple-600 text-purple-600 rounded hover:bg-purple-600 hover:text-white transition duration-300">
               Sign up
             </a>
