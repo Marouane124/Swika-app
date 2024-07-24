@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faCar, faShoppingCart, faKey, faThList } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar: React.FC = () => {
   return (
@@ -32,20 +34,25 @@ const Navbar: React.FC = () => {
           />
         </div>
         <div className="flex space-x-4 mb-4">
-          <Link href="/link1" className="text-gray-700 hover:text-purple-500">
-            Link 1
+          <Link href="/immobilier" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
+            <FontAwesomeIcon icon={faHome} />
+            <span>Immobilier</span>
           </Link>
-          <Link href="/link2" className="text-gray-700 hover:text-purple-500">
-            Link 2
+          <Link href="/automobile" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
+            <FontAwesomeIcon icon={faCar} />
+            <span>Automobile</span>
           </Link>
-          <Link href="/link3" className="text-gray-700 hover:text-purple-500">
-            Link 3
+          <Link href="/vente-occasion" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
+            <FontAwesomeIcon icon={faShoppingCart} />
+            <span>Vente d'occasion</span>
           </Link>
-          <Link href="/link4" className="text-gray-700 hover:text-purple-500">
-            Link 4
+          <Link href="/location-objets" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
+            <FontAwesomeIcon icon={faKey} />
+            <span>Location d'objets</span>
           </Link>
-          <Link href="/link5" className="text-gray-700 hover:text-purple-500">
-            Link 5
+          <Link href="/rubrique-fourre-tout" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
+            <FontAwesomeIcon icon={faThList} />
+            <span>Rubrique fourre-tout</span>
           </Link>
         </div>
       </div>

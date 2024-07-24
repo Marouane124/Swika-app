@@ -66,11 +66,26 @@ const Page: React.FC = () => {
       <h1 className="text-center text-3xl font-bold my-6 mt-[150px]">Déposer votre annonce</h1>
       <div className="flex justify-center">
         <button
-          onClick={handleClick}
-          className="w-full flex items-center justify-center h-14 px-6 mt-4 text-sm transition-colors duration-300 bg-white border-2 border-gray text-black rounded-lg focus:shadow-outline hover:bg-slate-200"
-        >
-          <span className="ml-4">ajouter annonce </span>
-        </button>
+  onClick={handleClick}
+  className="w-full flex items-center justify-center h-14 px- mt-2 w-100  text-sm transition-colors duration-300 bg-purple-600 text-white rounded-lg focus:shadow-outline hover:bg-purple-700"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth="2"
+    stroke="currentColor"
+    className="w-5 h-5 mr-2"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4 6h16M4 10h16M4 14h16M4 18h16"
+    />
+  </svg>
+  <span>Publier maintenant</span>
+</button>
+
       </div>
       <div className="flex flex-wrap justify-center gap-6 p-4 mt-16">
         {products.map(product => (
