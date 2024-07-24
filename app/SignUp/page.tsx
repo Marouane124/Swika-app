@@ -1,6 +1,9 @@
+import SignUp from "./SignUp";
+
 export default function Home() {
     return ( 
-        <h1>Sign Up</h1>
-
-);
+        <div className="bg-gray-50 min-h-screen">
+            <SignUp /> 
+        </div>
+    );
 }
