@@ -2,17 +2,17 @@
 import { useState } from 'react';
 
 const FormulaireAnnonce = () => {
-  const [category, setCategory] = useState('');
-  const [productName, setProductName] = useState('');
-  const [price, setPrice] = useState('');
-  const [location, setLocation] = useState('');
+  const [categorie, setCategorie] = useState('');
+  const [nomProduit, setNomProduit] = useState('');
+  const [prix, setPrix] = useState('');
+  const [localisation, setLocalisation] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here (e.g., send data to an API)
-    console.log({ category, productName, price, location, description, image });
+    // Gérez la soumission du formulaire ici (par exemple, envoyer les données à une API)
+    console.log({ categorie, nomProduit, prix, localisation, description, image });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,60 +23,60 @@ const FormulaireAnnonce = () => {
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">Create an Annonce to Sell Something</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">Créer une annonce</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category:</label>
+          <label htmlFor="categorie" className="block text-sm font-medium text-gray-700">Catégorie :</label>
           <select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            id="categorie"
+            value={categorie}
+            onChange={(e) => setCategorie(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="" disabled>Select a category</option>
-            <option value="electronics">Electronics</option>
-            <option value="furniture">Furniture</option>
-            <option value="clothing">Clothing</option>
-            <option value="books">Books</option>
-            {/* Add more categories as needed */}
+            <option value="" disabled>Sélectionnez une catégorie</option>
+            <option value="electronique">Électronique</option>
+            <option value="meubles">Meubles</option>
+            <option value="vetements">Vêtements</option>
+            <option value="livres">Livres</option>
+            {/* Ajoutez plus de catégories si nécessaire */}
           </select>
         </div>
         <div className="mb-4">
-          <label htmlFor="productName" className="block text-sm font-medium text-gray-700">Product Name:</label>
+          <label htmlFor="nomProduit" className="block text-sm font-medium text-gray-700">Nom du produit :</label>
           <input
             type="text"
-            id="productName"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            id="nomProduit"
+            value={nomProduit}
+            onChange={(e) => setNomProduit(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price (MAD):</label>
+          <label htmlFor="prix" className="block text-sm font-medium text-gray-700">Prix (MAD) :</label>
           <input
             type="number"
-            id="price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            id="prix"
+            value={prix}
+            onChange={(e) => setPrix(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location:</label>
+          <label htmlFor="localisation" className="block text-sm font-medium text-gray-700">Localisation :</label>
           <input
             type="text"
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            id="localisation"
+            value={localisation}
+            onChange={(e) => setLocalisation(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description :</label>
           <textarea
             id="description"
             value={description}
@@ -86,7 +86,7 @@ const FormulaireAnnonce = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Upload Image:</label>
+          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Télécharger une image :</label>
           <input
             type="file"
             id="image"
@@ -98,7 +98,7 @@ const FormulaireAnnonce = () => {
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-md shadow-sm hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         >
-          Submit
+          Soumettre
         </button>
       </form>
     </div>
