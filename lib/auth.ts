@@ -2,13 +2,6 @@ import { NextAuthOptions, User, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-const dummyUser = {
-  id: "1",
-  name: "Test User",
-  email: "test@example.com",
-  password: "password",
-};
-
 export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -25,17 +18,29 @@ export const authConfig: NextAuthOptions = {
         if (!credentials || !credentials.email || !credentials.password) {
           return null;
         }
-
-        if (
-          credentials.email === dummyUser.email &&
-          credentials.password === dummyUser.password
-        ) {
-          const { password, ...userWithoutPassword } = dummyUser;
-          return userWithoutPassword as User;
+      
+        try {
+          const res = await fetch(`${process.env.STRAPI_URL}/api/auth/local`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              identifier: credentials.email,
+              password: credentials.password,
+            }),
+          });
+      
+          const data = await res.json();
+      
+          if (data.user) {
+            return { ...data.user, jwt: data.jwt };
+          } else {
+            return null;
+          }
+        } catch (error) {
+          console.error('Strapi auth error:', error);
+          return null;
         }
-
-        return null;
-      },
+      }
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,

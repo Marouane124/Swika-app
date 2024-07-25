@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import Link from 'next/link';
 import GoogleSignInButton from '@/components/GoogleButton';
 import PersonIcon from '@mui/icons-material/Person';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -11,6 +10,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { registerUserAction } from "../../actions/auth-actions";
 
 export default function SignUp() {
   const router = useRouter();
@@ -19,31 +19,46 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = data.get('name');
-    const email = data.get('email');
-    const phone = data.get('phone');
-    const password = data.get('password');
-    const confirmPassword = data.get('confirmPassword');
-
+    const formData = new FormData(event.currentTarget);
+  
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+  
     if (!name || !email || !phone || !password || !confirmPassword) {
       toast.error('Veuillez remplir tous les champs !', {
         duration: 1500,
       });
       return;
     }
-
+  
     if (password !== confirmPassword) {
       toast.error('Les mots de passe ne correspondent pas !', {
         duration: 1500,
       });
       return;
     }
-
-    toast.success('Inscription réussie !', {
-      duration: 1000,
-    });
-    router.push("/");
+  
+    try {
+      const result = await registerUserAction(formData);
+      if (result.success) {
+        toast.success('Inscription réussie !', {
+          duration: 1000,
+        });
+        router.push("/");
+      } else {
+        toast.error(result.error || 'Erreur lors de l\'inscription. Veuillez réessayer.', {
+          duration: 1500,
+        });
+      }
+    } catch (error) {
+      toast.error('Erreur lors de l\'inscription. Veuillez réessayer.', {
+        duration: 1500,
+      });
+      console.error(error);
+    }
   };
 
   const toggleShowPassword = () => {
