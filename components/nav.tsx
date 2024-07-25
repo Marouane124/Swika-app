@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCar, faShoppingCart, faKey, faThList } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCar, faShoppingCart, faKey, faThList, faUser, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 p-4 w-full">
       <div className="container mx-auto flex flex-col items-center">
@@ -17,13 +23,20 @@ const Navbar: React.FC = () => {
               {/* Add more languages as needed */}
             </select>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/signin" className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition duration-300">
-              Sign in
-            </Link>
-            <Link href="/signup" className="px-4 py-2 border border-purple-600 text-purple-600 rounded hover:bg-purple-600 hover:text-white transition duration-300">
-              Sign up
-            </Link>
+          <div className="relative">
+            <button onClick={toggleMenu} className="focus:outline-none">
+              <FontAwesomeIcon icon={faUser} className="text-gray-700 text-xl" />
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+                <Link href="/signin" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                  Sign in
+                </Link>
+                <Link href="/signup" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                  Sign up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
         <div className="w-full mb-4">
@@ -53,6 +66,10 @@ const Navbar: React.FC = () => {
           <Link href="/rubrique-fourre-tout" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
             <FontAwesomeIcon icon={faThList} />
             <span>Rubrique fourre-tout</span>
+          </Link>
+          <Link href="/autre" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
+            <FontAwesomeIcon icon={faEllipsisH} />
+            <span>Autre</span>
           </Link>
         </div>
       </div>
