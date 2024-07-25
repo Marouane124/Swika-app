@@ -70,7 +70,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center my-0">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <div className="flex justify-center mb-6">
           <h1 className="text-black text-2xl font-bold">S&apos;inscrire</h1>
