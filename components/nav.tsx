@@ -34,10 +34,10 @@ const Navbar: React.FC = () => {
             </button>
             {menuOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
-                <Link href="/signin" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                <Link href="/SignIn" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                   Sign in
                 </Link>
-                <Link href="/signup" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                <Link href="/SignUp" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                   Sign up
                 </Link>
               </div>
