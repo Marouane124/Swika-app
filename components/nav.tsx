@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCar, faShoppingCart, faKey, faThList, faUser, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import PersonIcon from '@mui/icons-material/Person';
+import HomeIcon from '@mui/icons-material/Home';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import KeyIcon from '@mui/icons-material/Key';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,7 +30,7 @@ const Navbar: React.FC = () => {
           </div>
           <div className="relative">
             <button onClick={toggleMenu} className="focus:outline-none">
-              <FontAwesomeIcon icon={faUser} className="text-gray-700 text-xl" />
+              <PersonIcon className="text-gray-700 text-xl" />
             </button>
             {menuOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
@@ -48,27 +53,27 @@ const Navbar: React.FC = () => {
         </div>
         <div className="flex space-x-4 mb-4">
           <Link href="/immobilier" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
-            <FontAwesomeIcon icon={faHome} />
+            <HomeIcon />
             <span>Immobilier</span>
           </Link>
           <Link href="/automobile" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
-            <FontAwesomeIcon icon={faCar} />
+            <DirectionsCarIcon />
             <span>Automobile</span>
           </Link>
           <Link href="/vente-occasion" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
-            <FontAwesomeIcon icon={faShoppingCart} />
+            <ShoppingCartIcon />
             <span>Vente d'occasion</span>
           </Link>
           <Link href="/location-objets" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
-            <FontAwesomeIcon icon={faKey} />
+            <KeyIcon />
             <span>Location d'objets</span>
           </Link>
           <Link href="/rubrique-fourre-tout" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
-            <FontAwesomeIcon icon={faThList} />
+            <ListAltIcon />
             <span>Rubrique fourre-tout</span>
           </Link>
           <Link href="/autre" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
-            <FontAwesomeIcon icon={faEllipsisH} />
+            <MoreHorizIcon />
             <span>Autre</span>
           </Link>
         </div>
