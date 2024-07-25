@@ -11,6 +11,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { registerUserAction } from "../../actions/auth-actions";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { z } from 'zod';
 
 const signUpSchema = z.object({
@@ -103,9 +104,16 @@ export default function SignUp() {
     setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
   };
 
+  const handleBackClick = () => {
+    router.back();
+  };
+
   return (
     <div className="flex items-center justify-center my-0">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 relative">
+        <button className="absolute top-2 left-2 text-gray-500 hover:text-gray-700 pt-1 pl-2">
+          <ArrowBackIcon onClick={handleBackClick} />
+        </button>
         <div className="flex justify-center mb-6">
           <h1 className="text-black text-2xl font-bold">S&apos;inscrire</h1>
         </div>
