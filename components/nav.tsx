@@ -62,11 +62,11 @@ const Navbar: React.FC = () => {
           </Link>
           <Link href="/vente-occasion" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
             <ShoppingCartIcon />
-            <span>Vente d'occasion</span>
+            <span>Vente d&apos;occasion</span>
           </Link>
           <Link href="/location-objets" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
             <KeyIcon />
-            <span>Location d'objets</span>
+            <span>Location d&apos;objets</span>
           </Link>
           <Link href="/rubrique-fourre-tout" className="text-gray-700 hover:text-purple-500 flex items-center space-x-1">
             <ListAltIcon />
