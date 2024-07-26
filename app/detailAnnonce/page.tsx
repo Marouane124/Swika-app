@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import Image from 'next/image';
 
 export default function DetailAnnonce() {
   // Sample product details
@@ -45,9 +46,11 @@ export default function DetailAnnonce() {
       <CssBaseline />
       <Box className="relative flex flex-col bg-white p-6 rounded-lg shadow-lg h-full w-full overflow-hidden">
         <Box className="absolute top-4 right-4">
-          <img
+          <Image
             src="/icons/x.png"
             alt="Close Icon"
+            width={28}
+            height={28} 
             className="w-7 h-7 cursor-pointer"
           />
         </Box>
@@ -88,9 +91,11 @@ export default function DetailAnnonce() {
                 {product.title}
               </Typography>
               <Box className="flex items-center mt-1">
-                <img
+                <Image
                   src="/icons/location.png"
                   alt="Location Icon"
+                  width={28}
+                  height={28} 
                   className="w-4 h-4 mr-2"
                 />
                 <Typography
@@ -100,9 +105,11 @@ export default function DetailAnnonce() {
                   {product.payer}
                 </Typography>
                 <Box className="flex items-center ml-2">
-                  <img
+                  <Image
                     src="/icons/time.png"
                     alt="Time Icon"
+                    width={28}
+                    height={28} 
                     className="w-4 h-4 mr-2"
                   />
                   <Typography
