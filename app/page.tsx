@@ -96,7 +96,7 @@ const Page: React.FC = () => {
             onClick={handleClick}
             className="max-w-sm flex items-center justify-center h-12 px-4 text-lg font-medium transition-colors duration-300 bg-teal-600 text-white rounded-lg focus:shadow-outline hover:bg-teal-700"
           >
-            <EditNoteIcon />
+            <EditNoteIcon style={{ marginRight: "5" }}/>
             <span>Publier maintenant</span>
           </button>
         </div>
@@ -115,20 +115,7 @@ const Page: React.FC = () => {
             onClick={handleClick}
             className="max-w-sm flex items-center justify-center h-12 px-4 text-lg font-medium transition-colors duration-300 bg-teal-600 text-white rounded-lg focus:shadow-outline hover:bg-teal-700"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              className="w-6 h-6 mr-3"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              />
-            </svg>
+            <EditNoteIcon style={{ marginRight: "5" }}/>
             <span>Publier mon annonce</span>
           </button>
         </div>
