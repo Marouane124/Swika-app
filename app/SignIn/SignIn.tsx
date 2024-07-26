@@ -4,16 +4,17 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-hot-toast';
-import Link from 'next/link';
 import GoogleSignInButton from '@/components/GoogleButton';
 import LockIcon from '@mui/icons-material/Lock';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ForgotPassword from '@/components/ForgotPassword';
 
 export default function SignIn() {
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = React.useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -50,6 +51,8 @@ export default function SignIn() {
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -102,11 +105,6 @@ export default function SignIn() {
               </div>
             </div>
           </div>
-          <div className="flex items-end justify-end mb-6">
-            <Link href="/forgot" passHref className="text-sm text-indigo-600 hover:underline">
-              Mot de passe oublié?
-            </Link>
-          </div>
           <div>
             <button
               type="submit"
@@ -115,25 +113,42 @@ export default function SignIn() {
               Se connecter
             </button>
           </div>
-          <div className="mt-6 relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">ou</span>
-            </div>
-          </div>
         </form>
+        <div className="mt-4 flex items-center justify-end">
+          <button
+            type="button"
+            onClick={() => setIsForgotPasswordOpen(true)}
+            className="text-sm text-indigo-600 hover:underline"
+          >
+            Mot de passe oublié?
+          </button>
+        </div>
+        <div className="mt-6 relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">ou</span>
+          </div>
+        </div>
         <div className="mt-6">
           <GoogleSignInButton />
         </div>
         <div className="mt-6 flex items-center justify-center">
           <span className="px-2 text-black text-sm">Envie de nous rejoindre?</span>
-          <Link href="/signup" passHref className="text-sm text-indigo-600 hover:underline">
+          <button
+            type="button"
+            onClick={() => router.push('/signup')}
+            className="text-sm text-indigo-600 hover:underline"
+          >
             Créer un compte
-          </Link>
+          </button>
         </div>
       </div>
+      <ForgotPassword
+        isOpen={isForgotPasswordOpen}
+        onClose={() => setIsForgotPasswordOpen(false)}
+      />
     </div>
   );
 }

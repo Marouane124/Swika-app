@@ -1,12 +1,15 @@
-"use client";
-
-import * as React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import Link from 'next/link';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
-export default function Forgot() {
-  const [email, setEmail] = React.useState('');
+interface ForgotPasswordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProps) {
+  const [email, setEmail] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,6 +31,7 @@ export default function Forgot() {
 
       if (response.ok) {
         toast.success('Un e-mail de réinitialisation a été envoyé si l\'adresse existe.');
+        onClose();
       } else {
         toast.error(data.error.message || 'Une erreur est survenue.');
       }
@@ -37,9 +41,18 @@ export default function Forgot() {
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 mt-1 mr-1"
+          aria-label="Close"
+        >
+          <CloseIcon />
+        </button>
         <div className="flex justify-center mb-6">
           <h1 className="text-black text-2xl font-bold">Mot de passe oublié?</h1>
         </div>
@@ -72,11 +85,6 @@ export default function Forgot() {
             </button>
           </div>
         </form>
-        <div className="mt-6 flex items-center justify-center">
-          <Link href="/signin" className="text-sm text-indigo-600 hover:underline">
-            Retour à la connexion
-          </Link>
-        </div>
       </div>
     </div>
   );
