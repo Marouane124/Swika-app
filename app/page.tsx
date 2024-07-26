@@ -1,10 +1,11 @@
-"use client"; // Indique que ce composant est un Client Component
+"use client";
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Nav from '../components/nav';
 import ProductCard from '../components/prodcard';
-import Footer from '../components/footer'; // Import du Footer
+import Footer from '../components/footer'; 
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 const products = [
   {
@@ -77,15 +78,15 @@ const Page: React.FC = () => {
   };
 
   const handleClick = () => {
-    router.push("/SignIn");
+    router.push("/signin");
   };
 
   const handleViewProduct = () => {
-    router.push("/non-existing-page"); // Remplacez par la route non existante que vous souhaitez
+    router.push("/non-existing-page");
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 pt-32"> {/* Augmenter le padding top */}
+    <div className="min-h-screen bg-gray-200 pt-32">
       <Nav />
 
       <div className="text-center my-20">
@@ -95,20 +96,7 @@ const Page: React.FC = () => {
             onClick={handleClick}
             className="max-w-sm flex items-center justify-center h-12 px-4 text-lg font-medium transition-colors duration-300 bg-teal-600 text-white rounded-lg focus:shadow-outline hover:bg-teal-700"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              className="w-6 h-6 mr-3"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              />
-            </svg>
+            <EditNoteIcon />
             <span>Publier maintenant</span>
           </button>
         </div>
