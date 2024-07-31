@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
   }, [menuOpen]);
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 p-4 w-full">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 py-1 px-4 w-full">
       <div className="container mx-auto flex flex-col items-center">
         {/* Desktop View */}
         <div className="hidden lg:flex items-center justify-between w-full mb-0">
@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
                 <div className="relative">
                   <button onClick={toggleMenu} className="focus:outline-none">
                     <Image
-                      src={session.user.image || '/Default_avatar_profile.jpg'}
+                      src={session?.user?.image || '/Default_avatar_profile.jpg'}
                       alt="User Avatar"
                       width={40}
                       height={40}
@@ -79,7 +79,7 @@ const Navbar: React.FC = () => {
                   </button>
                   {menuOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
-                      <div className="block px-4 py-2 text-gray-800 text-sm">{session.user.name}</div>
+                      <div className="block px-4 py-2 text-gray-800 text-sm">{session?.user?.name}</div>
                       <Logoutbutton />
                     </div>
                   )}

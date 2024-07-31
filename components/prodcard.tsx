@@ -1,7 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 
-const ProductCard = ({ product }) => {
+type Product = {
+  name: string;
+  description: string;
+};
+
+const ProductCard =({ product }: { product: Product })=> {
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <Image width={300} height={300} src={'/logo.png'} alt={product.name} className="w-full h-48 object-fill" />
