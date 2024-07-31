@@ -86,7 +86,7 @@ export default function SignUp() {
       const apiResult = await registerUserAction(formData);
       if (apiResult.success) {
         toast.success('Inscription réussie !', { duration: 1000 });
-        router.push("/");
+        router.push("/signin");
       } else {
         toast.error(apiResult.error || 'Erreur lors de l\'inscription. Veuillez réessayer.', { duration: 1500 });
       }

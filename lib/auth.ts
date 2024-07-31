@@ -18,7 +18,7 @@ export const authConfig: NextAuthOptions = {
         if (!credentials || !credentials.email || !credentials.password) {
           return null;
         }
-      
+
         try {
           const res = await fetch(`${process.env.STRAPI_URL}/api/auth/local`, {
             method: 'POST',
@@ -28,9 +28,9 @@ export const authConfig: NextAuthOptions = {
               password: credentials.password,
             }),
           });
-      
+
           const data = await res.json();
-      
+
           if (data.user) {
             return { ...data.user, jwt: data.jwt };
           } else {
@@ -54,15 +54,22 @@ export const authConfig: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.jwt = user.jwt;
       }
+      //console.log("JWT callback, token:", token);
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id;
+      if (token && session.user) {
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.name = token.name as string;
+        session.user.jwt = token.jwt as string;
       }
+      //console.log("Session callback, session:", session);
       return session;
     },
   },
 };
-
