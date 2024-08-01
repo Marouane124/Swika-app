@@ -1,8 +1,6 @@
-// app/reset-password/page.tsx
-
 import React from 'react';
 import ResetPassword from './ResetPassword';
-import SuspenseBoundary from '../../SuspenseBoundary'; // Adjust the path if necessary
+import SuspenseBoundary from '../../SuspenseBoundary';
 
 const Page = () => (
   <SuspenseBoundary>
