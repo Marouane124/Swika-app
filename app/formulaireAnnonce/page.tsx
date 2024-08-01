@@ -4,112 +4,96 @@ import axios from 'axios';
 
 const FormulaireAnnonce = () => {
   const [category, setCategory] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [location, setLocation] = useState('');
-  const [image, setImage] = useState<File | null>(null);
-  const [immobilierFields, setImmobilierFields] = useState({
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+    location: '',
     type: '',
     address: '',
     chambre: '',
     salon: '',
-    toilette: '',
-    surface: ''
-  });
-  const [vehiculeFields, setVehiculeFields] = useState({
-    type: '',
+    toillette: '',
+    surface: '',
     modele: '',
     marque: '',
     annee: '',
-    kilometrage: ''
+    kilometrage: '',
   });
+  const [message, setMessage] = useState(''); // To display success or error messages
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('price', price);
-    formData.append('location', location);
-    formData.append('category', category);
+    const data = {
+      title: formData.title,
+      description: formData.description,
+      price: parseFloat(formData.price),
+      location: formData.location,
+      category: category, // Ensure this matches one of the expected values
+      ...(category === 'Meubles' && {
+        type: formData.type,
+        address: formData.address,
+        chambre: parseInt(formData.chambre),
+        salon: parseInt(formData.salon),
+        toillette: parseInt(formData.toillette),
+        surface: parseFloat(formData.surface),
+      }),
+      ...(category === 'Vehicules' && {
+        type: formData.type,
+        modele: formData.modele,
+        
+        marque: formData.marque,
+        annee: parseInt(formData.annee),
+        kilometrage: parseInt(formData.kilometrage),
+      }),
+    };
 
-    if (category === 'immobilier') {
-      formData.append('type', immobilierFields.type);
-      formData.append('address', immobilierFields.address);
-      formData.append('chambre', immobilierFields.chambre);
-      formData.append('salon', immobilierFields.salon);
-      formData.append('toillette', immobilierFields.toillette);
-      formData.append('surface', immobilierFields.surface);
-    } else if (category === 'vehicule') {
-      formData.append('type', vehiculeFields.type);
-      formData.append('modele', vehiculeFields.modele);
-      formData.append('marque', vehiculeFields.marque);
-      formData.append('annee', vehiculeFields.annee);
-      formData.append('kilometrage', vehiculeFields.kilometrage);
-    }
-
-    if (image) {
-      formData.append('image', image);
-    }
+    console.log('Submitting data:', data); // Log payload to debug
 
     try {
-      const response = await axios.post('http://163.172.170.136:1337/api/annonces', formData, {
+      const response = await axios.post('http://163.172.170.136:1337/api/annonces', { data }, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+          'Content-Type': 'application/json'
+        }
       });
-
-      console.log('Data saved:', response.data);
-      // Reset form or provide feedback to the user
-      setTitle('');
-      setDescription('');
-      setPrice('');
-      setLocation('');
-      setCategory('');
-      setImage(null);
-      setImmobilierFields({
-        type: '',
-        address: '',
-        chambre: '',
-        salon: '',
-        toilette: '',
-        surface: ''
-      });
-      setVehiculeFields({
-        type: '',
-        modele: '',
-        marque: '',
-        annee: '',
-        kilometrage: ''
-      });
+      setMessage('Annonce saved successfully!');
+      console.log('Annonce saved:', response.data);
     } catch (error) {
-      console.error('Error saving data:', error);
+      const errorMessage = error.response ? 
+        `Error saving annonce: ${error.response.status} ${error.response.statusText}` : 
+        `Error saving annonce: ${error.message}`;
+
+      setMessage(errorMessage);
+      console.error('Error saving annonce:', error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      }
     }
   };
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-bold mb-6 text-center">Créer une annonce</h1>
+      {message && <div className={`alert ${message.includes('Error') ? 'alert-error' : 'alert-success'}`}>{message}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">Titre :</label>
           <input
             type="text"
             id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
@@ -118,19 +102,21 @@ const FormulaireAnnonce = () => {
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description :</label>
           <textarea
             id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Prix :</label>
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Prix (MAD) :</label>
           <input
             type="number"
             id="price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            name="price"
+            value={formData.price}
+            onChange={handleInputChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
@@ -140,8 +126,9 @@ const FormulaireAnnonce = () => {
           <input
             type="text"
             id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />
@@ -150,26 +137,27 @@ const FormulaireAnnonce = () => {
           <label htmlFor="category" className="block text-sm font-medium text-gray-700">Catégorie :</label>
           <select
             id="category"
+            name="category"
             value={category}
-            onChange={handleCategoryChange}
+            onChange={(e) => setCategory(e.target.value)}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="" disabled>Sélectionnez une catégorie</option>
-            <option value="immobilier">Immobilier</option>
-            <option value="vehicule">Véhicule</option>
+            <option value="Meubles">Meubles</option>
+            <option value="Vehicules">Véhicules</option>
           </select>
         </div>
-        {category === 'immobilier' && (
+        {category === 'Meubles' && (
           <>
             <div className="mb-4">
-              <label htmlFor="immobilierType" className="block text-sm font-medium text-gray-700">Type :</label>
+              <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type :</label>
               <input
                 type="text"
-                id="immobilierType"
-                value={immobilierFields.type}
-                onChange={(e) => setImmobilierFields({ ...immobilierFields, type: e.target.value })}
-                required
+                id="type"
+                name="type"
+                value={formData.type}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -178,68 +166,68 @@ const FormulaireAnnonce = () => {
               <input
                 type="text"
                 id="address"
-                value={immobilierFields.address}
-                onChange={(e) => setImmobilierFields({ ...immobilierFields, address: e.target.value })}
-                required
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="chambre" className="block text-sm font-medium text-gray-700">Chambres :</label>
+              <label htmlFor="chambre" className="block text-sm font-medium text-gray-700">Chambre :</label>
               <input
                 type="number"
                 id="chambre"
-                value={immobilierFields.chambre}
-                onChange={(e) => setImmobilierFields({ ...immobilierFields, chambre: e.target.value })}
-                required
+                name="chambre"
+                value={formData.chambre}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="salon" className="block text-sm font-medium text-gray-700">Salons :</label>
+              <label htmlFor="salon" className="block text-sm font-medium text-gray-700">Salon :</label>
               <input
                 type="number"
                 id="salon"
-                value={immobilierFields.salon}
-                onChange={(e) => setImmobilierFields({ ...immobilierFields, salon: e.target.value })}
-                required
+                name="salon"
+                value={formData.salon}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="toillette" className="block text-sm font-medium text-gray-700">Toilettes :</label>
+              <label htmlFor="toillette" className="block text-sm font-medium text-gray-700">Toillette :</label>
               <input
                 type="number"
                 id="toillette"
-                value={immobilierFields.toillette}
-                onChange={(e) => setImmobilierFields({ ...immobilierFields, toilette: e.target.value })}
-                required
+                name="toillette"
+                value={formData.toillette}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="surface" className="block text-sm font-medium text-gray-700">Surface :</label>
+              <label htmlFor="surface" className="block text-sm font-medium text-gray-700">Surface (m²) :</label>
               <input
                 type="number"
                 id="surface"
-                value={immobilierFields.surface}
-                onChange={(e) => setImmobilierFields({ ...immobilierFields, surface: e.target.value })}
-                required
+                name="surface"
+                value={formData.surface}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </>
         )}
-        {category === 'vehicule' && (
+        {category === 'Vehicules' && (
           <>
             <div className="mb-4">
-              <label htmlFor="vehiculeType" className="block text-sm font-medium text-gray-700">Type :</label>
+              <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type :</label>
               <input
                 type="text"
-                id="vehiculeType"
-                value={vehiculeFields.type}
-                onChange={(e) => setVehiculeFields({ ...vehiculeFields, type: e.target.value })}
-                required
+                id="type"
+                name="type"
+                value={formData.type}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -248,9 +236,9 @@ const FormulaireAnnonce = () => {
               <input
                 type="text"
                 id="modele"
-                value={vehiculeFields.modele}
-                onChange={(e) => setVehiculeFields({ ...vehiculeFields, modele: e.target.value })}
-                required
+                name="modele"
+                value={formData.modele}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -259,9 +247,9 @@ const FormulaireAnnonce = () => {
               <input
                 type="text"
                 id="marque"
-                value={vehiculeFields.marque}
-                onChange={(e) => setVehiculeFields({ ...vehiculeFields, marque: e.target.value })}
-                required
+                name="marque"
+                value={formData.marque}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -270,9 +258,9 @@ const FormulaireAnnonce = () => {
               <input
                 type="number"
                 id="annee"
-                value={vehiculeFields.annee}
-                onChange={(e) => setVehiculeFields({ ...vehiculeFields, annee: e.target.value })}
-                required
+                name="annee"
+                value={formData.annee}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -281,29 +269,20 @@ const FormulaireAnnonce = () => {
               <input
                 type="number"
                 id="kilometrage"
-                value={vehiculeFields.kilometrage}
-                onChange={(e) => setVehiculeFields({ ...vehiculeFields, kilometrage: e.target.value })}
-                required
+                name="kilometrage"
+                value={formData.kilometrage}
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </>
         )}
-        <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image :</label>
-          <input
-            type="file"
-            id="image"
-            onChange={handleImageChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-          />
-        </div>
-        <div className="text-center">
+        <div className="mt-6">
           <button
             type="submit"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Soumettre
+            Enregistrer
           </button>
         </div>
       </form>
