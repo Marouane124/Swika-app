@@ -102,7 +102,7 @@ const Page: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 p-4 mb-12">
+      <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-6 p-4 mb-12">
         {products.map(product => (
           <ProductCard key={product.id} product={product} />
         ))}

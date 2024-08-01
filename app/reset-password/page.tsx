@@ -1,6 +1,4 @@
-"use client";
-
-import * as React from 'react';
+import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import LockIcon from '@mui/icons-material/Lock';
