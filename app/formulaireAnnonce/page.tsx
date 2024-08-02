@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -20,16 +21,16 @@ const FormulaireAnnonce = () => {
     annee: '',
     kilometrage: '',
   });
-  const [message, setMessage] = useState(''); // To display success or error messages
+  const [message, setMessage] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = {
@@ -37,7 +38,7 @@ const FormulaireAnnonce = () => {
       description: formData.description,
       price: parseFloat(formData.price),
       location: formData.location,
-      category: category, // Ensure this matches one of the expected values
+      category: category,
       ...(category === 'Meubles' && {
         type: formData.type,
         address: formData.address,
@@ -49,14 +50,13 @@ const FormulaireAnnonce = () => {
       ...(category === 'Vehicules' && {
         type: formData.type,
         modele: formData.modele,
-        
         marque: formData.marque,
         annee: parseInt(formData.annee),
         kilometrage: parseInt(formData.kilometrage),
       }),
     };
 
-    console.log('Submitting data:', data); // Log payload to debug
+    console.log('Submitting data:', data);
 
     try {
       const response = await axios.post('http://163.172.170.136:1337/api/annonces', { data }, {
@@ -66,14 +66,21 @@ const FormulaireAnnonce = () => {
       });
       setMessage('Annonce saved successfully!');
       console.log('Annonce saved:', response.data);
-    } catch (error) {
-      const errorMessage = error.response ? 
-        `Error saving annonce: ${error.response.status} ${error.response.statusText}` : 
-        `Error saving annonce: ${error.message}`;
+    } catch (error: unknown) {
+      let errorMessage: string;
+
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response ?
+          `Error saving annonce: ${error.response.status} ${error.response.statusText}` :
+          `Error saving annonce: ${error.message}`;
+      } else {
+        errorMessage = `Error saving annonce: ${String(error)}`;
+      }
 
       setMessage(errorMessage);
       console.error('Error saving annonce:', error);
-      if (error.response) {
+
+      if (axios.isAxiosError(error) && error.response) {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
         console.error('Response headers:', error.response.headers);
@@ -82,210 +89,246 @@ const FormulaireAnnonce = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">Créer une annonce</h1>
-      {message && <div className={`alert ${message.includes('Error') ? 'alert-error' : 'alert-success'}`}>{message}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Titre :</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+        <div className="flex justify-center mb-6">
+          <h1 className="text-black text-2xl font-bold">Créer une annonce</h1>
         </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description :</label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Prix (MAD) :</label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Localisation :</label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            value={formData.location}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">Catégorie :</label>
-          <select
-            id="category"
-            name="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="" disabled>Sélectionnez une catégorie</option>
-            <option value="Meubles">Meubles</option>
-            <option value="Vehicules">Véhicules</option>
-          </select>
-        </div>
-        {category === 'Meubles' && (
-          <>
-            <div className="mb-4">
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type :</label>
-              <input
-                type="text"
-                id="type"
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700">Adresse :</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="chambre" className="block text-sm font-medium text-gray-700">Chambre :</label>
-              <input
-                type="number"
-                id="chambre"
-                name="chambre"
-                value={formData.chambre}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="salon" className="block text-sm font-medium text-gray-700">Salon :</label>
-              <input
-                type="number"
-                id="salon"
-                name="salon"
-                value={formData.salon}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="toillette" className="block text-sm font-medium text-gray-700">Toillette :</label>
-              <input
-                type="number"
-                id="toillette"
-                name="toillette"
-                value={formData.toillette}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="surface" className="block text-sm font-medium text-gray-700">Surface (m²) :</label>
-              <input
-                type="number"
-                id="surface"
-                name="surface"
-                value={formData.surface}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-          </>
-        )}
-        {category === 'Vehicules' && (
-          <>
-            <div className="mb-4">
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type :</label>
-              <input
-                type="text"
-                id="type"
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="modele" className="block text-sm font-medium text-gray-700">Modèle :</label>
-              <input
-                type="text"
-                id="modele"
-                name="modele"
-                value={formData.modele}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="marque" className="block text-sm font-medium text-gray-700">Marque :</label>
-              <input
-                type="text"
-                id="marque"
-                name="marque"
-                value={formData.marque}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="annee" className="block text-sm font-medium text-gray-700">Année :</label>
-              <input
-                type="number"
-                id="annee"
-                name="annee"
-                value={formData.annee}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="kilometrage" className="block text-sm font-medium text-gray-700">Kilométrage :</label>
-              <input
-                type="number"
-                id="kilometrage"
-                name="kilometrage"
-                value={formData.kilometrage}
-                onChange={handleInputChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-          </>
-        )}
-        <div className="mt-6">
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Enregistrer
-          </button>
-        </div>
-      </form>
+        {message && <div className={`alert ${message.includes('Error') ? 'alert-error' : 'alert-success'}`}>{message}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              Titre :
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+              className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              Description :
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
+              className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+              Prix (MAD) :
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleInputChange}
+              required
+              className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+              Localisation :
+            </label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              required
+              className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              Catégorie :
+            </label>
+            <select
+              id="category"
+              name="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="" disabled>Sélectionnez une catégorie</option>
+              <option value="Meubles">Meubles</option>
+              <option value="Vehicules">Véhicules</option>
+            </select>
+          </div>
+          {category === 'Meubles' && (
+            <>
+              <div className="mb-4">
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                  Type :
+                </label>
+                <input
+                  type="text"
+                  id="type"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                  Adresse :
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="chambre" className="block text-sm font-medium text-gray-700">
+                  Chambre :
+                </label>
+                <input
+                  type="number"
+                  id="chambre"
+                  name="chambre"
+                  value={formData.chambre}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="salon" className="block text-sm font-medium text-gray-700">
+                  Salon :
+                </label>
+                <input
+                  type="number"
+                  id="salon"
+                  name="salon"
+                  value={formData.salon}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="toillette" className="block text-sm font-medium text-gray-700">
+                  Toillette :
+                </label>
+                <input
+                  type="number"
+                  id="toillette"
+                  name="toillette"
+                  value={formData.toillette}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="surface" className="block text-sm font-medium text-gray-700">
+                  Surface (m²) :
+                </label>
+                <input
+                  type="number"
+                  id="surface"
+                  name="surface"
+                  value={formData.surface}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </>
+          )}
+          {category === 'Vehicules' && (
+            <>
+              <div className="mb-4">
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                  Type :
+                </label>
+                <input
+                  type="text"
+                  id="type"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="modele" className="block text-sm font-medium text-gray-700">
+                  Modèle :
+                </label>
+                <input
+                  type="text"
+                  id="modele"
+                  name="modele"
+                  value={formData.modele}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="marque" className="block text-sm font-medium text-gray-700">
+                  Marque :
+                </label>
+                <input
+                  type="text"
+                  id="marque"
+                  name="marque"
+                  value={formData.marque}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="annee" className="block text-sm font-medium text-gray-700">
+                  Année :
+                </label>
+                <input
+                  type="number"
+                  id="annee"
+                  name="annee"
+                  value={formData.annee}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="kilometrage" className="block text-sm font-medium text-gray-700">
+                  Kilométrage :
+                </label>
+                <input
+                  type="number"
+                  id="kilometrage"
+                  name="kilometrage"
+                  value={formData.kilometrage}
+                  onChange={handleInputChange}
+                  className="block w-full pl-2 pr-4 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </>
+          )}
+          <div className="mt-6">
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
