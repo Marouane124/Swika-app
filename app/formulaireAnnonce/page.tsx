@@ -21,6 +21,7 @@ const FormulaireAnnonce = () => {
     annee: '',
     kilometrage: '',
   });
+  const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -28,6 +29,12 @@ const FormulaireAnnonce = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,13 +63,17 @@ const FormulaireAnnonce = () => {
       }),
     };
 
-    console.log('Submitting data:', data);
+    const formDataObj = new FormData();
+    formDataObj.append('data', JSON.stringify(data));
+    if (image) {
+      formDataObj.append('files.image', image);
+    }
 
     try {
-      const response = await axios.post('http://163.172.170.136:1337/api/annonces', { data }, {
+      const response = await axios.post('http://163.172.170.136:1337/api/annonces', formDataObj, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
       setMessage('Annonce saved successfully!');
       console.log('Annonce saved:', response.data);
@@ -94,7 +105,11 @@ const FormulaireAnnonce = () => {
         <div className="flex justify-center mb-6">
           <h1 className="text-black text-2xl font-bold">Créer une annonce</h1>
         </div>
-        {message && <div className={`alert ${message.includes('Error') ? 'alert-error' : 'alert-success'}`}>{message}</div>}
+        {message && (
+          <div className={`alert ${message.includes('Error') ? 'alert-error' : 'alert-success'}`}>
+            {message}
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -318,6 +333,21 @@ const FormulaireAnnonce = () => {
                 />
               </div>
             </>
+          )}
+          {category && (
+            <div className="mb-4">
+              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                Image :
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="block w-full text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
           )}
           <div className="mt-6">
             <button
