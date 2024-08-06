@@ -1,6 +1,4 @@
-// app/reset-password/ResetPassword.tsx
-
-"use client"; // Ensure this line is present for client-side execution
+"use client"; 
 
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
